@@ -4,12 +4,19 @@
     <meta charset="UTF-8">
     <title>RPG</title>
     <script src=https://code.jquery.com/jquery-3.6.0.min.js></script>
-    <link href="..\\css\\my.css" rel="stylesheet">
+    <link href="/../css/my.css" rel="stylesheet">
+    <script defer type="text/javascript" src="/html/script.js"></script>
 </head>
 <body>
+
 <h1>RPG admin panel</h1>
 <h2>Accounts list:</h2>
+
+<label for="countPerPage">Count per page:</label>
+<select id="countPerPage"></select>
+
 <table id="accountsTable">
+
     <thead>
     <tr>
         <th>#</th>
@@ -20,39 +27,20 @@
         <th>Level</th>
         <th>Birthday</th>
         <th>Banned</th>
+        <th>Edit</th>
+        <th>Delete</th>
     </tr>
     </thead>
+
     <tbody>
 
     </tbody>
 </table>
 
-<script>
-    function loadAccounts() {
-        $.get("rest/players", function (data) {
-            if (data && data.length > 0) {
-                data.forEach(function (player, index) {
-                    $('#accountsTable tbody').append(
-                        '<tr>' +
-                        '<td>' + (index + 1) + '</td>' +
-                        '<td>' + player.name + '</td>' +
-                        '<td>' + player.title + '</td>' +
-                        '<td>' + player.race + '</td>' +
-                        '<td>' + player.profession + '</td>' +
-                        '<td>' + player.level + '</td>' +
-                        '<td>' + new Date(player.birthday).toLocaleDateString() + '</td>' +
-                        '<td>' + player.banned + '</td>' +
-                        '</tr>'
-                    );
-                });
-            }
-        });
-    }
-
-    $(document).ready(function () {
-        loadAccounts();
-    });
-</script>
+<div>
+    <span>Pages:</span>
+    <span class="pagination-buttons"></span>
+</div>
 
 </body>
 </html>

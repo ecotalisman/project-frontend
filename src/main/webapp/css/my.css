@@ -10,3 +10,8 @@ th, td {
 th {
     background-color: #f2f2f2;
 }
+
+.page-button.active {
+    color: red;
+    font-weight: bold;
+}
