@@ -43,7 +43,7 @@ function loadAccountPage(pageNumber) {
                     alt: 'Edit',
                     class: 'action-icon edit-icon'
                 }).on('click', function() {
-
+                    enableEditing(player.id, $row)
                 });
 
                 var $deleteImg = $('<img>').attr({
@@ -56,13 +56,13 @@ function loadAccountPage(pageNumber) {
 
                 var $row = $('<tr>').append(
                     $('<td>').text(player.id),
-                    $('<td>').text(player.name),
-                    $('<td>').text(player.title),
-                    $('<td>').text(player.race),
-                    $('<td>').text(player.profession),
+                    $('<td>').addClass('name').text(player.name),
+                    $('<td>').addClass('title').text(player.title),
+                    $('<td>').addClass('race').text(player.race),
+                    $('<td>').addClass('profession').text(player.profession),
                     $('<td>').text(player.level),
                     $('<td>').text(new Date(player.birthday).toLocaleDateString()),
-                    $('<td>').text(player.banned),
+                    $('<td>').addClass('banned').text(player.banned),
                     $('<td>').append($editImg),
                     $('<td>').append($deleteImg)
                 );
@@ -101,6 +101,82 @@ function deletePlayer(playerId) {
         },
         error: function(xhr, status, error) {
             console.error("Error deleting player with ID: " + playerId, status, error);
+        }
+    });
+}
+
+function enableEditing(playerId, $row) {
+    $row.find('.name').html(createInputField($row.find('.name').text()));
+    $row.find('.title').html(createInputField($row.find('.title').text()));
+
+    var raceSelect = $('<select>').addClass('input-field');
+    var races = ['HUMAN', 'DWARF', 'ELF', 'GIANT', 'ORC', 'TROLL', 'HOBBIT'];
+    races.forEach(function(race) {
+        raceSelect.append($('<option>').attr('value', race).text(race));
+    });
+    raceSelect.val($row.find('.race').text());
+    $row.find('.race').empty().append(raceSelect);
+
+    var professionSelect = $('<select>').addClass('input-field');
+    var professions = ['WARRIOR', 'ROGUE', 'SORCERER', 'CLERIC', 'PALADIN', 'NAZGUL', 'WARLOCK', 'DRUID'];
+    professions.forEach(function(profession) {
+        professionSelect.append($('<option>').attr('value', profession).text(profession));
+    });
+    professionSelect.val($row.find('.profession').text());
+    $row.find('.profession').empty().append(professionSelect);
+
+    var bannedSelect = $('<select>').addClass('input-field');
+    bannedSelect.append($('<option>').attr('value', 'true').text('true'));
+    bannedSelect.append($('<option>').attr('value', 'false').text('false'));
+    bannedSelect.val($row.find('.banned').text());
+    $row.find('.banned').empty().append(bannedSelect);
+
+    $row.find('.edit-icon').attr({
+        src: '../img/save.png',
+        alt: 'Save'
+    }).off('click').on('click', function() {
+        savePlayer(playerId, $row);
+    });
+
+    $row.find('.delete-icon').hide();
+}
+
+function createInputField(value) {
+    return $('<input>').attr({
+        type: 'text',
+        value: value
+    });
+}
+
+function savePlayer(playerId, $row) {
+    var updatedData = {
+        name: $row.find('.name input').val(),
+        title: $row.find('.title input').val(),
+        race: $row.find('.race select').val(),
+        profession: $row.find('.profession select').val(),
+        banned: $row.find('.banned select').val()
+    };
+
+    $.ajax({
+        url: "/rest/players/" + playerId,
+        type: 'POST',
+        contentType: 'application/json',
+        data: JSON.stringify(updatedData),
+        success: function(result) {
+            $row.find('.edit-cell').empty().append($('<img>').attr({
+                src: '../img/edit.png',
+                alt: 'Edit',
+                class: 'action-icon edit-icon'
+            }).on('click', function() {
+                enableEditing(playerId, $row);
+            }));
+
+            $row.find('.delete-icon').show();
+
+            loadAccountPage($('.page-button.active').index());
+        },
+        error: function(xhr, status, error) {
+            console.error("Error updating player with ID: " + playerId, status, error);
         }
     });
 }

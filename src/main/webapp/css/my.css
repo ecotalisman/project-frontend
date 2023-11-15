@@ -15,3 +15,14 @@ th {
     color: red;
     font-weight: bold;
 }
+
+.name input, .title input {
+    width: 100%;
+    padding: 4px;
+    margin: 0;
+    border: 1px solid #ddd;
+    box-sizing: border-box;
+    background-color: #fff;
+    color: #333;
+    font-size: inherit;
+}
