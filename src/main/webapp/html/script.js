@@ -85,6 +85,58 @@ $(document).ready(function () {
     $('#countPerPage').val(3);
     getTotalCount(0);
     loadAccountPage(0);
+
+    const races = ['HUMAN', 'DWARF', 'ELF', 'GIANT', 'ORC', 'TROLL', 'HOBBIT'];
+    const professions = ['WARRIOR', 'ROGUE', 'SORCERER', 'CLERIC', 'PALADIN', 'NAZGUL', 'WARLOCK', 'DRUID'];
+
+    races.forEach(function(race) {
+        $('#playerRace').append(new Option(race, race));
+    });
+
+    professions.forEach(function(profession) {
+        $('#playerProfession').append(new Option(profession, profession));
+    });
+
+    $('#newPlayerForm').on('submit', function(e) {
+        e.preventDefault();
+
+        var birthdayValue = $('#playerBirthday').val();
+        var birthdayTimestamp = Date.parse(birthdayValue);
+
+        var formData = {
+            name: $('#playerName').val(),
+            title: $('#playerTitle').val(),
+            race: $('#playerRace').val(),
+            profession: $('#playerProfession').val(),
+            level: parseInt($('#playerLevel').val(), 10),
+            birthday: birthdayTimestamp,
+            banned: $('#playerBanned').val() === 'true'
+        };
+
+        if (!formData.name || !formData.title || !formData.race || !formData.profession || isNaN(formData.level) || isNaN(formData.birthday)) {
+            alert('Please fill all the required fields correctly.');
+            return;
+        }
+
+        if (formData.name.length > 12 || formData.title.length > 30 || formData.level < 0 || formData.level > 100 || formData.birthday < 0) {
+            alert('Some fields contain invalid data.');
+            return;
+        }
+
+        $.ajax({
+            url: "/rest/players",
+            type: 'POST',
+            contentType: 'application/json',
+            data: JSON.stringify(formData),
+            success: function(result) {
+                $('#newPlayerForm')[0].reset();
+                loadAccountPage($('.page-button.active').index() || 0);
+            },
+            error: function(xhr, status, error) {
+                console.error("Error creating new player", status, error);
+            }
+        });
+    });
 });
 
 $('#countPerPage').change(function () {

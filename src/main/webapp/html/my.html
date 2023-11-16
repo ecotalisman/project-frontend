@@ -12,34 +12,88 @@
 <h1>RPG admin panel</h1>
 <h2>Accounts list:</h2>
 
-<label for="countPerPage">Count per page:</label>
-<select id="countPerPage"></select>
+<div class="count-per-page-container">
+    <label for="countPerPage" class="label-count-per-page">Count per page:</label>
+    <select id="countPerPage" class="select-count-per-page"></select>
+</div>
 
-<table id="accountsTable">
+<div class="table-container">
+    <table id="accountsTable">
 
-    <thead>
-    <tr>
-        <th>#</th>
-        <th class="name">Name</th>
-        <th class="title">Title</th>
-        <th class="race">Race</th>
-        <th class="profession">Profession</th>
-        <th>Level</th>
-        <th>Birthday</th>
-        <th class="banned">Banned</th>
-        <th>Edit</th>
-        <th>Delete</th>
-    </tr>
-    </thead>
+        <thead>
+        <tr>
+            <th>#</th>
+            <th class="name">Name</th>
+            <th class="title">Title</th>
+            <th class="race">Race</th>
+            <th class="profession">Profession</th>
+            <th>Level</th>
+            <th>Birthday</th>
+            <th class="banned">Banned</th>
+            <th>Edit</th>
+            <th>Delete</th>
+        </tr>
+        </thead>
 
-    <tbody>
+        <tbody>
 
-    </tbody>
-</table>
+        </tbody>
+    </table>
+</div>
 
-<div>
+<div class="pagination-container">
     <span>Pages:</span>
     <span class="pagination-buttons"></span>
+</div>
+
+<div class="create-account-section">
+    <hr>
+    <h2>Create new account:</h2>
+    <form id="newPlayerForm">
+        <div class="form-row">
+            <label for="playerName">Name:</label>
+            <input type="text" id="playerName" name="name" required pattern=".{1,12}" title="1 to 12 characters">
+        </div>
+
+        <div class="form-row">
+            <label for="playerTitle">Title:</label>
+            <input type="text" id="playerTitle" name="title" required pattern=".{1,30}" title="1 to 30 characters">
+        </div>
+
+        <div class="form-row">
+            <label for="playerRace">Race:</label>
+            <select id="playerRace" name="race">
+            </select>
+        </div>
+
+        <div class="form-row">
+            <label for="playerProfession">Profession:</label>
+            <select id="playerProfession" name="profession">
+            </select>
+        </div>
+
+        <div class="form-row">
+            <label for="playerLevel">Level:</label>
+            <input type="number" id="playerLevel" name="level" min="0" max="100" required>
+        </div>
+
+        <div class="form-row">
+            <label for="playerBirthday">Birthday:</label>
+            <input type="date" id="playerBirthday" name="birthday" required>
+        </div>
+
+        <div class="form-row">
+            <label for="playerBanned">Banned:</label>
+            <select id="playerBanned" name="banned">
+                <option value="false">false</option>
+                <option value="true">true</option>
+            </select>
+        </div>
+
+        <div class="form-row">
+            <input type="submit" value="Create Account">
+        </div>
+    </form>
 </div>
 
 </body>
